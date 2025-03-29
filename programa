@@ -1,0 +1,177 @@
+import random
+import calendar
+import datetime
+
+def mostrar_motivacao():
+    mensagens = [
+        "Você está no caminho certo! Continue assim!",
+        "Poupar é a chave para um futuro financeiro saudável!",
+        "Cada centavo economizado é um passo a mais para seus objetivos!",
+        "Lembre-se: pequenas economias hoje resultam em grandes conquistas amanhã!",
+        "A persistência nos gastos controlados traz a liberdade financeira!"
+    ]
+    print(random.choice(mensagens))
+
+def calcular_poupanca(salario, porcentagem):
+    return salario * (porcentagem / 100)
+
+def sugerir_gastos_diarios(saldo_final, dias_no_mes):
+    if dias_no_mes > 0:
+        return saldo_final / dias_no_mes
+    else:
+        return 0
+
+def mostrar_resumo(salario, poupanca, despesas, saldo_final, gastos_diarios_sugeridos, mes_atual, ano_atual):
+    total_despesas = sum(despesas.values())
+    print("\nResumo de Gastos:")
+    print(f"Salário: R$ {salario:.2f}")
+    print(f"Poupança: R$ {poupanca:.2f}")
+    print("Despesas:")
+    for despesa, valor in despesas.items():
+        print(f"- {despesa}: R$ {valor:.2f}")
+    print(f"Total das Despesas: R$ {total_despesas:.2f}")
+    print(f"Saldo Final (após despesas e poupança): R$ {saldo_final:.2f}")
+    print(f"\nSugestão de gasto diário para {calendar.month_name[mes_atual]} {ano_atual}: R$ {gastos_diarios_sugeridos:.2f}")
+
+def registrar_gasto_do_dia(saldo_final):
+    while True:
+        try:
+            gasto_dia = float(input("Digite o gasto do dia (em R$): "))
+            if gasto_dia > saldo_final:
+                print("O gasto não pode ser maior que o saldo disponível! Tente novamente.")
+            else:
+                return gasto_dia
+        except ValueError:
+            print("Por favor, insira um valor numérico válido.")
+
+def interagir_com_ia():
+    print("\nBem-vindo ao assistente virtual de finanças! Como posso te ajudar hoje?")
+    print("Você pode me perguntar sobre dicas de finanças, ajuda para calcular suas despesas ou outras questões.")
+    while True:
+        comando = input("Digite sua pergunta ou comando (ou 'sair' para encerrar): ").lower()
+        
+        if "sair" in comando:
+            print("Até logo! Lembre-se de que cada passo financeiro é um passo para a sua liberdade!")
+            break
+        elif "dicas" in comando or "ajuda" in comando:
+            print("\nAqui vão algumas dicas para você melhorar seu controle financeiro:")
+            print("- Tente pagar suas contas em dia para evitar multas e juros.")
+            print("- Evite comprar por impulso. Faça uma lista de compras e siga-a.")
+            print("- Sempre que possível, busque alternativas mais baratas para suas despesas fixas.")
+            print("- Tente criar uma reserva de emergência para situações imprevistas.")
+        elif "gasto diário" in comando:
+            print("\nO gasto diário sugerido depende do seu saldo final e do número de dias no mês.")
+            print("Se precisar de ajuda para calcular, digite o comando novamente e eu posso te ajudar.")
+        elif "poupança" in comando:
+            print("\nA poupança é uma forma importante de garantir um futuro financeiro mais tranquilo.")
+            print("Tente poupar uma porcentagem do seu salário todos os meses, mesmo que seja pequena.")
+            print("Lembre-se, quanto mais cedo começar, mais cedo verá os resultados!")
+        elif "salário" in comando:
+            while True:
+                try:
+                    novo_salario = float(input("Qual é o novo valor do seu salário? (em R$): "))
+                    if novo_salario > 0:
+                        print("Salário atualizado com sucesso!")
+                        mostrar_motivacao()  # Mensagem motivacional
+                        return novo_salario
+                    else:
+                        print("O salário deve ser um valor positivo. Tente novamente.")
+                except ValueError:
+                    print("Por favor, insira um valor numérico válido.")
+        elif "poupança" in comando and "alterar" in comando:
+            while True:
+                try:
+                    nova_poupanca = float(input("Qual porcentagem do seu salário você deseja poupar? (0 a 50%): "))
+                    if 0 <= nova_poupanca <= 50:
+                        print(f"Porcentagem de poupança alterada para {nova_poupanca}%!")
+                        mostrar_motivacao()  # Mensagem motivacional
+                        return nova_poupanca
+                    else:
+                        print("Porcentagem deve estar entre 0% e 50%. Tente novamente.")
+                except ValueError:
+                    print("Por favor, insira um valor numérico válido.")
+        elif "despesa" in comando:
+            despesa_alterar = input("Qual despesa você deseja alterar? (Água, Energia, Aluguel): ").lower()
+            if despesa_alterar in ['água', 'energia', 'aluguel']:
+                while True:
+                    try:
+                        novo_valor = float(input(f"Qual é o novo valor para a despesa de {despesa_alterar.capitalize()}? (em R$): "))
+                        if novo_valor >= 0:
+                            print(f"Despesa de {despesa_alterar.capitalize()} atualizada com sucesso!")
+                            mostrar_motivacao()  # Mensagem motivacional
+                            return despesa_alterar, novo_valor
+                        else:
+                            print("O valor da despesa deve ser positivo. Tente novamente.")
+                    except ValueError:
+                        print("Por favor, insira um valor numérico válido.")
+            else:
+                print("Despesas não reconhecidas! Tente novamente.")
+        else:
+            print("\nDesculpe, não entendi o comando. Tente perguntar de outra forma ou peça ajuda com 'dicas' ou 'ajuda'.")
+
+def main():
+    mostrar_motivacao()
+
+    # Definindo o salário fixo
+    salario = float(input("Digite seu salário fixo (em R$): "))
+
+    # Definindo a porcentagem de poupança
+    while True:
+        try:
+            porcentagem_poupanca = float(input("Quanto você deseja poupar? (0 a 50%): "))
+            if 0 <= porcentagem_poupanca <= 50:
+                break
+            else:
+                print("Por favor, insira um valor entre 0 e 50%!")
+        except ValueError:
+            print("Por favor, insira um valor numérico válido.")
+
+    # Calcular o valor a ser poupado
+    poupanca = calcular_poupanca(salario, porcentagem_poupanca)
+
+    # Entrada de despesas
+    despesas = {}
+    despesas_nome = ["Água", "Energia", "Aluguel"]
+    for nome in despesas_nome:
+        while True:
+            try:
+                valor = float(input(f"Digite o valor da despesa de {nome} (em R$): "))
+                despesas[nome] = valor
+                break
+            except ValueError:
+                print("Por favor, insira um valor numérico válido.")
+
+    # Obter o mês e o ano atuais automaticamente
+    hoje = datetime.date.today()
+    mes_atual = hoje.month
+    ano_atual = hoje.year
+
+    # Obter o número de dias do mês atual
+    dias_no_mes = calendar.monthrange(ano_atual, mes_atual)[1]
+
+    # Calcular o saldo final
+    total_despesas = sum(despesas.values())
+    saldo_final = salario - total_despesas - poupanca
+
+    # Calcular o gasto diário sugerido
+    gastos_diarios_sugeridos = sugerir_gastos_diarios(saldo_final, dias_no_mes)
+
+    # Exibindo o resumo
+    mostrar_resumo(salario, poupanca, despesas, saldo_final, gastos_diarios_sugeridos, mes_atual, ano_atual)
+
+    # Registrar o gasto diário e subtrair do saldo final
+    gasto_dia = registrar_gasto_do_dia(saldo_final)
+    saldo_final -= gasto_dia
+    gastos_diarios_sugeridos = sugerir_gastos_diarios(saldo_final, dias_no_mes)
+
+    print(f"\nApós o gasto do dia de R$ {gasto_dia:.2f}, seu saldo final é: R$ {saldo_final:.2f}")
+    print(f"Sua nova sugestão de gasto diário é: R$ {gastos_diarios_sugeridos:.2f}")
+
+    # Exibindo o resumo após o gasto diário
+    mostrar_resumo(salario, poupanca, despesas, saldo_final, gastos_diarios_sugeridos, mes_atual, ano_atual)
+
+    # Interação com a IA
+    interagir_com_ia()
+
+if __name__ == "__main__":
+    main()
